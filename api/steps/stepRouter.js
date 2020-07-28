@@ -39,21 +39,30 @@ router.delete("/:id", validateStepId, (req, res) => {
 
 router.put("/:id", validateStepId, validateStep, (req, res) => {
   Steps.update(req.step.id, req.body)
-    .then((id) => {
-      if (id) {
-        Steps.findById(req.step.id)
-          .then((step) => {
-            res.status(200).json(step);
-          })
-          .catch((err) => {
-            req
-              .status(500)
-              .json({ message: "An error occured during getting step" });
-          });
+    .then((step) => {
+      if (step) {
+        res.status(200).json(step);
       } else {
-        res.status(404).json({ message: "The step could not be found" });
+        req
+          .status(500)
+          .json({ message: "An error occured during getting step" });
       }
     })
+    // .then((id) => {
+    //   if (id) {
+    //     Steps.findById(req.step.id)
+    //       .then((step) => {
+    //         res.status(200).json(step);
+    //       })
+    //       .catch((err) => {
+    //         req
+    //           .status(500)
+    //           .json({ message: "An error occured during getting step" });
+    //       });
+    //   } else {
+    //     res.status(404).json({ message: "The step could not be found" });
+    //   }
+    // })
     .catch((error) => {
       console.log(error);
       res.status(500).json({

@@ -81,21 +81,30 @@ router.delete("/:id", validateSchemeId, (req, res) => {
 
 router.put("/:id", validateSchemeId, validateScheme, (req, res) => {
   Schemes.update(req.scheme.id, req.body)
-    .then((count) => {
-      if (count) {
-        Schemes.findById(req.scheme.id)
-          .then((scheme) => {
-            res.status(200).json(scheme);
-          })
-          .catch((err) => {
-            req
-              .status(500)
-              .json({ message: "An error occured during getting scheme" });
-          });
+    .then((scheme) => {
+      if (scheme) {
+        res.status(200).json(scheme);
       } else {
-        res.status(404).json({ message: "The scheme could not be found" });
+        req
+          .status(500)
+          .json({ message: "An error occured during getting scheme" });
       }
     })
+    // .then((count) => {
+    //   if (count) {
+    //     Schemes.findById(req.scheme.id)
+    //       .then((scheme) => {
+    //         res.status(200).json(scheme);
+    //       })
+    //       .catch((err) => {
+    //         req
+    //           .status(500)
+    //           .json({ message: "An error occured during getting scheme" });
+    //       });
+    //   } else {
+    //     res.status(404).json({ message: "The scheme could not be found" });
+    //   }
+    // })
     .catch((error) => {
       res.statusMessage = "Error updating the scheme";
       console.log(error);
